@@ -5,11 +5,11 @@
  * *******************************************************
  */
 
-import styles from './../sass/aos.scss';
+//import styles from './../sass/aos.scss';
 
 // Modules & helpers
-import throttle from 'lodash.throttle';
-import debounce from 'lodash.debounce';
+import throttle from 'lodash/throttle';
+import debounce from 'lodash/debounce';
 
 import observe from './libs/observer';
 
@@ -38,7 +38,8 @@ let options = {
   duration: 400,
   disable: false,
   once: false,
-  startEvent: 'DOMContentLoaded'
+  startEvent: 'DOMContentLoaded',
+  container: window
 };
 
 /**
@@ -52,7 +53,7 @@ const refresh = function refresh(initialize = false) {
     // Extend elements objects in $aosElements with their positions
     $aosElements = prepare($aosElements, options);
     // Perform scroll event, to refresh view and show/hide elements
-    handleScroll($aosElements, options.once);
+    handleScroll($aosElements, options.once, options.container);
 
     return $aosElements;
   }
@@ -151,8 +152,8 @@ const init = function init(settings) {
   /**
    * Handle scroll event to animate elements on scroll
    */
-  window.addEventListener('scroll', throttle(() => {
-    handleScroll($aosElements, options.once);
+  options.container.addEventListener('scroll', throttle(() => {
+    handleScroll($aosElements, options.once, options.container);
   }, 99));
 
   /**
