@@ -4,11 +4,14 @@
  * @param {int}  top        scrolled distance
  * @param {void} once
  */
-const setState = function (el, top, once) {
+const setState = function (el, top, once, onAnimate) {
   const attrOnce = el.node.getAttribute('data-aos-once');
 
   if (top > el.position) {
-    el.node.classList.add('aos-animate');
+    if (el.node.className.indexOf('aos-animate') === -1) {
+      el.node.classList.add('aos-animate');
+      onAnimate(el.node.getAttribute('data-aos'));
+    }
   } else if (typeof attrOnce !== 'undefined') {
     if (attrOnce === 'false' || (!once && attrOnce !== 'true')) {
       el.node.classList.remove('aos-animate');
@@ -24,7 +27,7 @@ const setState = function (el, top, once) {
  * @param  {bool} once               plugin option
  * @return {void}
  */
-const handleScroll = function ($elements, once, container) {
+const handleScroll = function ($elements, once, container, onAnimate) {
   let scrollTop, scrollHeight;
 
   if (container === window) {
@@ -40,7 +43,7 @@ const handleScroll = function ($elements, once, container) {
    * and animate them on scroll
    */
   $elements.forEach((el, i) => {
-    setState(el, scrollHeight + scrollTop, once);
+    setState(el, scrollHeight + scrollTop, once, onAnimate);
   });
 };
 
